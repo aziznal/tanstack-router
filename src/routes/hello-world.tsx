@@ -9,7 +9,8 @@ function RouteComponent() {
   return (
     <div className="items-center justify-center text-center flex flex-col h-dvh w-dvw gap-4">
       <Nav />
-      Hello "/hello-world"!
+
+      <h1 className="text-2xl font-black">Hello "/hello-world"!</h1>
     </div>
   )
 }

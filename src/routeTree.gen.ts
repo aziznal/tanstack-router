@@ -13,8 +13,7 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as HelloWorldImport } from './routes/hello-world'
 import { Route as IndexImport } from './routes/index'
-import { Route as HelloWorldCounterImport } from './routes/hello-world.counter'
-import { Route as HelloWorldSplatImport } from './routes/hello-world.$'
+import { Route as HelloNameImport } from './routes/hello.$name'
 
 // Create/Update Routes
 
@@ -30,16 +29,10 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const HelloWorldCounterRoute = HelloWorldCounterImport.update({
-  id: '/counter',
-  path: '/counter',
-  getParentRoute: () => HelloWorldRoute,
-} as any)
-
-const HelloWorldSplatRoute = HelloWorldSplatImport.update({
-  id: '/$',
-  path: '/$',
-  getParentRoute: () => HelloWorldRoute,
+const HelloNameRoute = HelloNameImport.update({
+  id: '/hello/$name',
+  path: '/hello/$name',
+  getParentRoute: () => rootRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -60,83 +53,56 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelloWorldImport
       parentRoute: typeof rootRoute
     }
-    '/hello-world/$': {
-      id: '/hello-world/$'
-      path: '/$'
-      fullPath: '/hello-world/$'
-      preLoaderRoute: typeof HelloWorldSplatImport
-      parentRoute: typeof HelloWorldImport
-    }
-    '/hello-world/counter': {
-      id: '/hello-world/counter'
-      path: '/counter'
-      fullPath: '/hello-world/counter'
-      preLoaderRoute: typeof HelloWorldCounterImport
-      parentRoute: typeof HelloWorldImport
+    '/hello/$name': {
+      id: '/hello/$name'
+      path: '/hello/$name'
+      fullPath: '/hello/$name'
+      preLoaderRoute: typeof HelloNameImport
+      parentRoute: typeof rootRoute
     }
   }
 }
 
 // Create and export the route tree
 
-interface HelloWorldRouteChildren {
-  HelloWorldSplatRoute: typeof HelloWorldSplatRoute
-  HelloWorldCounterRoute: typeof HelloWorldCounterRoute
-}
-
-const HelloWorldRouteChildren: HelloWorldRouteChildren = {
-  HelloWorldSplatRoute: HelloWorldSplatRoute,
-  HelloWorldCounterRoute: HelloWorldCounterRoute,
-}
-
-const HelloWorldRouteWithChildren = HelloWorldRoute._addFileChildren(
-  HelloWorldRouteChildren,
-)
-
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/hello-world': typeof HelloWorldRouteWithChildren
-  '/hello-world/$': typeof HelloWorldSplatRoute
-  '/hello-world/counter': typeof HelloWorldCounterRoute
+  '/hello-world': typeof HelloWorldRoute
+  '/hello/$name': typeof HelloNameRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/hello-world': typeof HelloWorldRouteWithChildren
-  '/hello-world/$': typeof HelloWorldSplatRoute
-  '/hello-world/counter': typeof HelloWorldCounterRoute
+  '/hello-world': typeof HelloWorldRoute
+  '/hello/$name': typeof HelloNameRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/hello-world': typeof HelloWorldRouteWithChildren
-  '/hello-world/$': typeof HelloWorldSplatRoute
-  '/hello-world/counter': typeof HelloWorldCounterRoute
+  '/hello-world': typeof HelloWorldRoute
+  '/hello/$name': typeof HelloNameRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/hello-world' | '/hello-world/$' | '/hello-world/counter'
+  fullPaths: '/' | '/hello-world' | '/hello/$name'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/hello-world' | '/hello-world/$' | '/hello-world/counter'
-  id:
-    | '__root__'
-    | '/'
-    | '/hello-world'
-    | '/hello-world/$'
-    | '/hello-world/counter'
+  to: '/' | '/hello-world' | '/hello/$name'
+  id: '__root__' | '/' | '/hello-world' | '/hello/$name'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  HelloWorldRoute: typeof HelloWorldRouteWithChildren
+  HelloWorldRoute: typeof HelloWorldRoute
+  HelloNameRoute: typeof HelloNameRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  HelloWorldRoute: HelloWorldRouteWithChildren,
+  HelloWorldRoute: HelloWorldRoute,
+  HelloNameRoute: HelloNameRoute,
 }
 
 export const routeTree = rootRoute
@@ -150,26 +116,18 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/hello-world"
+        "/hello-world",
+        "/hello/$name"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
     "/hello-world": {
-      "filePath": "hello-world.tsx",
-      "children": [
-        "/hello-world/$",
-        "/hello-world/counter"
-      ]
+      "filePath": "hello-world.tsx"
     },
-    "/hello-world/$": {
-      "filePath": "hello-world.$.tsx",
-      "parent": "/hello-world"
-    },
-    "/hello-world/counter": {
-      "filePath": "hello-world.counter.tsx",
-      "parent": "/hello-world"
+    "/hello/$name": {
+      "filePath": "hello.$name.tsx"
     }
   }
 }
